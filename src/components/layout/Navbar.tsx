@@ -2,12 +2,14 @@ import {Menu, X} from 'lucide-react';
 import {useEffect, useRef, useState} from 'react';
 import {Link, NavLink, useLocation} from 'react-router-dom';
 import {LinkButton} from '@/src/components/ui/Button';
+import {Logo} from '@/src/components/ui/Logo';
 import {COMPANY_SETTINGS, PRIMARY_NAV_ITEMS} from '@/src/data/defaults';
 
 export function Navbar() {
   const {pathname} = useLocation();
   const [menuPath, setMenuPath] = useState<string | null>(null);
   const mobileMenuOpen = menuPath === pathname;
+  const headerRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstMobileLinkRef = useRef<HTMLAnchorElement>(null);
 
@@ -23,23 +25,46 @@ export function Navbar() {
       }
     };
 
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (target instanceof Node && !headerRef.current?.contains(target)) {
+        setMenuPath(null);
+      }
+    };
+
+    const desktopMediaQuery = window.matchMedia('(min-width: 768px)');
+    const handleViewportChange = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        setMenuPath(null);
+      }
+    };
+
     window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('pointerdown', handlePointerDown);
+    desktopMediaQuery.addEventListener('change', handleViewportChange);
     firstMobileLinkRef.current?.focus();
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('pointerdown', handlePointerDown);
+      desktopMediaQuery.removeEventListener('change', handleViewportChange);
     };
   }, [mobileMenuOpen]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur-sm">
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur-sm"
+    >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-8 px-4 sm:px-6 lg:px-8">
-        {/* Zone 1: Single clean wordmark */}
+        {/* Zone 1: Official Corporate Logo */}
         <Link
           to="/"
-          className="font-display text-lg font-semibold tracking-tight text-slate-900 whitespace-nowrap shrink-0 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-600"
+          onClick={() => setMenuPath(null)}
+          aria-label={`${COMPANY_SETTINGS.companyName} — Home`}
+          className="inline-flex shrink-0 items-center rounded-md py-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-600"
         >
-          {COMPANY_SETTINGS.shortName}
+          <Logo variant="full" size="md" priority />
         </Link>
 
         {/* Zone 2: Concise single-line navigation links */}
@@ -117,6 +142,7 @@ export function Navbar() {
             <LinkButton
               to="/contact"
               variant="primary"
+              onClick={() => setMenuPath(null)}
               className="w-full justify-center"
             >
               Get in Touch

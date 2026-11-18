@@ -1,15 +1,26 @@
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 import {BrowserRouter, Route, Routes, useLocation} from 'react-router-dom';
 import {PageShell} from '@/src/components/layout/PageShell';
 import {HomePage} from '@/src/features/home/HomePage';
 import {NotFoundPage} from '@/src/features/placeholders/NotFoundPage';
 import {RoutePlaceholderPage} from '@/src/features/placeholders/RoutePlaceholderPage';
 
-function ScrollToTop() {
+function RouteFocusAndScroll() {
   const {pathname} = useLocation();
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    const mainElement = document.getElementById('main-content');
+    if (mainElement) {
+      mainElement.focus({preventScroll: true});
+    }
   }, [pathname]);
 
   return null;
@@ -18,7 +29,7 @@ function ScrollToTop() {
 export default function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
+      <RouteFocusAndScroll />
       <PageShell>
         <Routes>
           <Route path="/" element={<HomePage />} />

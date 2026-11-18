@@ -18,6 +18,7 @@ interface ActionButtonProps extends BaseProps {
 
 interface LinkButtonProps extends BaseProps {
   to: string;
+  onClick?: () => void;
 }
 
 interface ExternalLinkButtonProps extends BaseProps {
@@ -57,9 +58,19 @@ export function Button({
   );
 }
 
-export function LinkButton({variant = 'primary', className = '', to, children}: LinkButtonProps) {
+export function LinkButton({
+  variant = 'primary',
+  className = '',
+  to,
+  onClick,
+  children,
+}: LinkButtonProps) {
   return (
-    <Link to={to} className={`${baseClasses} ${variantClasses[variant]} ${className}`}>
+    <Link
+      to={to}
+      onClick={onClick}
+      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
+    >
       {children}
     </Link>
   );

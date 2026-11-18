@@ -1,4 +1,5 @@
 import {Link} from 'react-router-dom';
+import {Logo} from '@/src/components/ui/Logo';
 import {COMPANY_SETTINGS, FOOTER_NAVIGATION} from '@/src/data/defaults';
 
 export function Footer() {
@@ -11,11 +12,12 @@ export function Footer() {
           <div className="md:col-span-5">
             <Link
               to="/"
-              className="font-display text-base font-semibold tracking-tight text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-600"
+              aria-label={`${COMPANY_SETTINGS.companyName} — Home`}
+              className="inline-flex items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-600"
             >
-              {COMPANY_SETTINGS.companyName}
+              <Logo variant="full" size="lg" />
             </Link>
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-600">
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-600">
               {COMPANY_SETTINGS.tagline} A Philippine-based SaaS technology company building
               focused reservation platforms.
             </p>
