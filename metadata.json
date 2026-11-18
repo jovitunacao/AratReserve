@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "AratReserve Reservation Services",
+  "description": "Official corporate website of AratReserve Reservation Services, a Philippine-based SaaS technology company building focused reservation platforms.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
